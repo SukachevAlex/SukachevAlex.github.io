@@ -855,6 +855,7 @@ body {
   box-shadow: 10px 10px 0 0 #e8be7b;
   max-width: 680px;
   margin-bottom: 40px;
+  height: 100%;
 }
 
 .fragment__info {
@@ -1274,7 +1275,7 @@ body {
 
   .fragment__image,
   .fragment__info {
-    width: 95%;
+    width: 90%;
   }
 
   .tabs__item {
@@ -1429,6 +1430,10 @@ body {
 }
 
 @media only screen and (max-width:480px) {
+  .header {
+    padding-bottom: 20px;
+  }
+
   .tabs__list {
     margin: 0 70px 20px;
   }
