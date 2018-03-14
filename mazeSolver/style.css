@@ -1,0 +1,47 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: #006B73;
+  font-size: 16px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  margin: 50px auto
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+input {
+  width: 50px
+}
+
+.settings, .button {
+  margin-bottom: 30px
+}
+
+#solution__text {
+
+  font-size: 24px;
+  font-weight: bold;
+
+}
+
+#start {
+  padding: 20px 40px;
+  background-color: #fff;
+  color: #000;
+  font-size: 20px;
+}
+
+.row {
+  margin: 10px
+}
