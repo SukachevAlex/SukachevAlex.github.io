@@ -27,8 +27,17 @@ $(document).ready(function() {
         }, 500);
     });
 
+    $('.popup__link').magnificPopup({
+        type:'inline',
+        midClick: true
+    });
+
+    $('.popup__close').on('click', function() {
+        $.magnificPopup.close();
+    })
+
 });
 
 $(window).on('load', function() {
-    $('.preloader__wrapper').delay(1500).fadeOut('slow');
+    $('.preloader__wrapper').delay(1000).fadeOut('slow');
 });
