@@ -7,29 +7,43 @@ body {
   font-size: 16px;
   margin: 0;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
 header {
-  margin: 50px auto
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
-input {
+
+input[type="text"] {
+  width: 100px
+}
+
+input[type="number"] {
   width: 50px
+}
+
+.form__settings {
+  display: flex;
+  display: row;
+  flex-wrap: wrap;
 }
 
 .settings, .button {
   margin-bottom: 30px
 }
 
-#solution__text {
+.solution {
+  text-align: center;
+}
 
+#solution__text {
   font-size: 24px;
   font-weight: bold;
 

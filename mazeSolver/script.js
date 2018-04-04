@@ -1,83 +1,84 @@
-let cols = 10;
-let rows = 10;
-let grid_size = 50;
 let grid = [];
-
 let openSet = [];
 let closedSet = [];
+let path = [];
+let steps_field;
 let start;
 let end;
+let current;
 let w, h;
-let frames = 2;
-let path = [];
 
-let do_diagonal = false;
-let random_nodes = false;
-let do_debug = false;
-let grid_spawn_rate = 0;
-
-let is_drawing = true;
-let steps = 0;
+let is_drawing = false;
 let found_path = true;
 let calculating = false;
 
-document.getElementById('start').addEventListener('click', function() {
-	steps = 0;
-	if (document.getElementById('do_diagonal').checked == true) {
-		do_diagonal = true;
-	}
-	if (document.getElementById('random_nodes').checked == true) {
-		random_nodes = true;
-	}
-	grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
-	cols = document.getElementById('cols').value;
-	rows = document.getElementById('rows').value;
 
-	buildGrid();
-	generateBoard();
+function init() {
 
-	is_drawing = false;
-	loop();
-	calculating = true;
+	document.getElementById('start').addEventListener('click', function() {
 
-});
+		do_diagonal = document.getElementById('do_diagonal').checked;
+		random_nodes = document.getElementById('random_nodes').checked;
+		grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
+		steps_field = document.getElementById('steps');
+		cols = document.getElementById('cols').value;
+		rows = document.getElementById('rows').value;
+		algorithm = document.getElementById('algorithm').value;
+		document.getElementById('solution__text').innerHTML = 'Solution:';
+
+		buildGrid();
+		generateBoard();
+
+		loop();
+		calculating = true;
+		current = start;
+		steps = -1;
+
+
+	});
+}
 
 
 function buildGrid() {
 	// 2d array + create spots
 	for(let i = 0; i < cols; i++) {
-		grid[ i ] = [];
+		grid[i] = [];
 
 		for(let j = 0; j < rows; j++) {
-			grid[ i ][ j ] = new Spot(i, j);
+			grid[i][j] = new Spot(i, j);
 		}
 	}
-
 	// set neighbors
 	for(let i = 0; i < cols; i++) {
 		for(let j = 0; j < rows; j++) {
-			grid[ i ][ j ].addNeighbors(grid);
+			grid[i][j].addNeighbors(grid);
 		}
 	}
 	if (random_nodes) {
-
 		start = grid[ Math.round(random(0, (cols - 1))) ][ Math.round(random(0, (rows - 1))) ];
 		end = grid[ Math.round(random(0, (cols - 1))) ][ Math.round(random(0, (rows - 1))) ];
 	} else {
 		start = grid[0][0];
 		end = grid[(cols - 1)][(rows - 1)];
 	}
+}
 
+
+function finishSolving() {
+	calculating = false;
+	noLoop();
+	document.getElementById('solution__text').innerHTML = `Find path in ${steps} steps, path length = ${pathLength}`;
+
+	found_path = true;
 }
 
 function generateBoard() {
-	// reset global variables
+
 	openSet = [];
 	closedSet = [];
 	path = [];
 	found_path = false
 
-	// make sure start and end aren't walls
 	start.wall = false;
 	end.wall = false;
 
@@ -104,218 +105,141 @@ function heuristic(a, b) {
 	return d;
 }
 
-function Spot(i, j) {
-	this.i = i;
-	this.j = j;
-	this.f = 0;
-	this.g = 0;
-	this.h = 0;
-	this.neighbors = [];
-	this.previous = undefined;
-	this.wall = false;
+function resolveAStar() {
 
-	if(random(1) < grid_spawn_rate) {
-		this.wall = true;
+	let winner = 0;
+
+	for(let i = 0; i < openSet.length; i++) {
+		if(openSet[i].f < openSet[winner].f) {
+			winner = i;
+		}
 	}
 
-	this.show = function(col) {
-		noStroke();
+	current = openSet[winner];
 
-		fill(col);
+	if(current === end) {
+		finishSolving();
+	}
 
-		if(this.wall) {
-			fill(20, 20, 20);
-		}
+	removeFromArray(openSet, current);
+	closedSet.push(current);
 
-		rect((this.i * w), (this.j * h), (w - 1), (h - 1));
-	};
+	let neighbors = current.neighbors;
 
-	this.addNeighbors = function(grid) {
-		let i = this.i;
-		let j = this.j;
+	for(let i = 0; i < neighbors.length; i++) {
+		let neighbor = neighbors[i];
 
-		// left
-		if(i < (cols - 1)) {
-			this.neighbors.push(grid[ i + 1 ][ j     ]);
-		}
+		if(!closedSet.includes(neighbor) && !neighbor.wall) {
+			let tempG = current.g + 1;
 
-		// right
-		if(i > 0) {
-			this.neighbors.push(grid[ i - 1 ][ j     ]);
-		}
+			let newPath = false;
 
-		// above
-		if(j < (rows - 1)) {
-			this.neighbors.push(grid[ i     ][ j + 1 ]);
-		}
-
-		// below
-		if(j > 0) {
-			this.neighbors.push(grid[ i     ][ j - 1 ]);
-		}
-
-		if(do_diagonal) {
-			// diag top left
-			if((i > 0) && (j > 0)) {
-				this.neighbors.push(grid[ i - 1 ][ j - 1 ]);
+			if(openSet.includes(neighbor)) {
+				if(tempG < neighbor.g) {
+					neighbor.g = tempG;
+					newPath = true;
+				}
+			} else {
+				neighbor.g = tempG;
+				newPath = true;
+				openSet.push(neighbor);
 			}
 
-			// diag top right
-			if((i < (cols - 1)) && (j > 0)) {
-				this.neighbors.push(grid[ i + 1 ][ j - 1 ]);
-			}
-
-			// diag bottom left
-			if((i > 0) && (j < (rows - 1))) {
-				this.neighbors.push(grid[ i - 1 ][ j + 1 ]);
-			}
-
-			// diag bottom right
-			if((i < (cols - 1)) && (j < (cols - 1))) {
-				this.neighbors.push(grid[ i + 1 ][ j + 1 ]);
+			if(newPath) {
+				neighbor.h = heuristic(neighbor, end);
+				neighbor.f = (neighbor.g + neighbor.h);
+				neighbor.previous = current;
 			}
 		}
-	};
+	}
+}
+
+function resolveRandom() {
+
+	current.visited = true;
+	if(current === end) {
+		//pathLength = openSet.length;
+		finishSolving();
+
+	} else {
+		let neighbors = current.neighbors;
+		let neighborList = [];
+
+		for (let i = 0; i < neighbors.length; i++) {
+
+			if (!neighbors[i].wall && !neighbors[i].visited) {
+				neighborList.push(neighbors[i]);
+			}
+		}
+		if (neighborList.length > 0) {
+			let next = neighborList[floor(random(0, neighborList.length))];
+			if (next) {
+				next.previous = current;
+				openSet.push(current);
+				current = next;
+			}
+		} else if (openSet.length > 0) {
+			closedSet.push(current);
+			current = openSet.pop();
+		}
+	}
+}
+
+function createCanv() {
+	createCanvas(640, 640);
+
+	w = float(640 / cols);
+	h = float(640 / rows);
+}
+
+function countSteps() {
+	steps++;
+	steps_field.innerHTML = steps;
+}
+
+
+init();
+
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+		frames += 1;
+		setup();
+  } else if (keyCode === DOWN_ARROW) {
+		frames -= 1;
+		setup();
+  }
 }
 
 function setup() {
 	frameRate(frames);
-
-}
-
-function createCanv() {
-	createCanvas(cols * grid_size, rows * grid_size);
-
-	w = (width / cols);
-	h = (height / rows);
 }
 
 function draw() {
 	if (calculating) {
+		document.getElementById('frameRateInput').value= floor(frameRate());
 		createCanv();
+		countSteps();
 
-		steps++;
-		document.getElementById('steps').innerHTML = steps;
-
-		var current;
-
-		if(!is_drawing) {
-			let won_this_round = false;
-
-			if(openSet.length > 0) {
-				// keep going
-				let winner = 0;
-
-				for(let i = 0; i < openSet.length; i++) {
-					if(openSet[ i ].f < openSet[ winner ].f) {
-						winner = i;
-					}
-				}
-
-				current = openSet[ winner ];
-
-				if(current === end) {
-					calculating = false;
-					noLoop();
-					console.log("Found solution!");
-					document.getElementById('solution__text').innerHTML = `Find path in ${steps} steps`;
-
-
-					won_this_round = true;
-					found_path = true;
-				}
-
-				if(!won_this_round) {
-					removeFromArray(openSet, current);
-					closedSet.push(current);
-
-					let neighbors = current.neighbors;
-
-					for(let i = 0; i < neighbors.length; i++) {
-						let neighbor = neighbors[ i ];
-
-						if(!closedSet.includes(neighbor) && !neighbor.wall) {
-							let tempG = current.g + 1;
-
-							let newPath = false;
-
-							if(openSet.includes(neighbor)) {
-								if(tempG < neighbor.g) {
-									neighbor.g = tempG;
-									newPath = true;
-								}
-							} else {
-								neighbor.g = tempG;
-								newPath = true;
-								openSet.push(neighbor);
-							}
-
-							if(newPath) {
-								neighbor.h = heuristic(neighbor, end);
-								neighbor.f = (neighbor.g + neighbor.h);
-								neighbor.previous = current;
-							}
-						}
-					}
-				}
-			} else {
-				// no solution
-				console.log("No solution!");
-				document.getElementById('solution__text').innerHTML = 'No solution!';
-				noLoop();
-
-				// return 1;
+		if(openSet.length > 0) {
+			if (algorithm == 'aStar') {
+				resolveAStar();
+			}else if (algorithm == 'random') {
+				resolveRandom();
 			}
+
+		} else {
+			document.getElementById('solution__text').innerHTML = 'Nqio solution!';
+			noLoop();
 		}
-
-		background(255);
-
-		for(let i = 0; i < cols; i++) {
-			for(let j = 0; j < cols; j++) {
-				grid[ i ][ j ].show(color(255));
-			}
-		}
-
-		if(!is_drawing) {
-			for(let i = 0; i < closedSet.length; i++) {
-				closedSet[ i ].show(color(255, 0, 0));
-			}
-
-			for(let i = 0; i < openSet.length; i++) {
-				openSet[ i ].show(color(0, 255, 0));
-			}
-		}
+		drawBackground();
+		drawSets();
+		drawCurrentPath(current);
+		drawStartEnd();
 
 
-		let start_color = color(133, 255, 199);
-		let end_color = color(255, 140, 143);
-
-		if(!is_drawing) {
-			// draw the current best path
-			path = [];
-			let temp = current;
-			path.push(temp);
-			while(temp.previous) {
-				path.push(temp.previous);
-				temp = temp.previous;
-			}
-
-			stroke(0, 0, 255);
-			strokeWeight(w/5);
-			beginShape();
-			noFill();
-			for(let i = 0; i < path.length; i++) {
-				vertex(path[i].i * w + w/2, path[i].j * h + h/2);
-			}
-			endShape();
-		}
-
-
-		// draw start + end
-		start.show(start_color);
-		end.show(end_color);
 	}else {
 		noLoop();
 	}
+
 
 }
