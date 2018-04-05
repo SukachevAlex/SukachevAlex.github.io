@@ -4,12 +4,12 @@ function resolveRandom() {
 
 	current.visited = true;
 	if(current === end) {
-		finishSolving();
+		finishSolving(true);
 
 	} else {
 		countSteps();
 		countTime();
-		
+
 		let neighbors = current.neighbors;
 		let neighborList = [];
 
@@ -31,10 +31,10 @@ function resolveRandom() {
 			current = openSet.pop();
 		}
 	}
-	drawBackground();
-	drawSets();
-	drawStartEnd();
-	drawCurrentPath(current, color(0, 0, 255));
+	// drawBackground();
+	// drawSets();
+	// drawStartEnd();
+	// drawCurrentPath(current, color(0, 0, 255));
 
 
 }

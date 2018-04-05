@@ -11,7 +11,7 @@ function resolveAStar() {
 	current = openSet[winner];
 
 	if(current === end) {
-		finishSolving();
+		finishSolving(true);
 	} else {
 		countSteps();
 		countTime();
@@ -48,9 +48,11 @@ function resolveAStar() {
 			}
 		}
 	}
-	drawBackground();
-	drawSets();
-	drawStartEnd();
-	drawCurrentPath(current, color(0, 0, 255));
+
+
+	// drawBackground();
+	// drawSets();
+	// drawStartEnd();
+	// drawCurrentPath(current, color(0, 0, 255));
 
 }

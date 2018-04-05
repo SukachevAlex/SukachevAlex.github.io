@@ -62,11 +62,14 @@ function buildGrid() {
 }
 
 
-function finishSolving() {
+function finishSolving(resolve) {
 	calculating = false;
 	noLoop();
-	document.getElementById('solution__text').innerHTML = `Find path in ${steps} steps, path length = ${pathLength}`;
-
+	if (resolve) {
+		document.getElementById('solution__text').innerHTML = `Find path in ${steps} steps, path length = ${pathLength}`;
+	} else {
+		document.getElementById('solution__text').innerHTML = 'No solution!';
+	}
 }
 
 function generateBoard() {
@@ -139,6 +142,11 @@ function draw() {
 		document.getElementById('frameRateInput').value= floor(frameRate());
 		createCanv();
 
+		drawBackground();
+		drawSets();
+		drawStartEnd();
+		drawCurrentPath(current, color(0, 0, 255));
+		drawCurrentPath(currentSecond, color(255, 0, 255));
 		if(openSet.length > 0) {
 			if (algorithm == 'aStar') {
 				resolveAStar();
@@ -148,9 +156,9 @@ function draw() {
 				resolveRandomTwoParticle();
 			}
 		} else {
-			document.getElementById('solution__text').innerHTML = 'No solution!';
-			noLoop();
+			finishSolving(false);
 		}
+
 	}else {
 		noLoop();
 	}

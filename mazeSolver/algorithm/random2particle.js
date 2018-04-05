@@ -4,7 +4,7 @@ function resolveRandomTwoParticle() {
 
 	current.visited = true;
 	if(current === end || currentSecond === end) {
-		finishSolving();
+		finishSolving(true);
 		noLoop();
 
 	} else {
@@ -51,16 +51,12 @@ function resolveRandomTwoParticle() {
 		} else if (currentSecond.previous){
 			currentSecond = currentSecond.previous;
 		}
-
-
 	}
 
-		drawBackground();
-		drawSets();
-		drawStartEnd();
-		drawCurrentPath(current, color(0, 0, 255));
-		drawCurrentPath(currentSecond, color(255, 0, 255));
 
+	if (current === start && currentSecond === start) {
+		openSet = [];
+	}
 
 
 }
