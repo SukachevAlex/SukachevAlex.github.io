@@ -17,18 +17,22 @@ function drawSets() {
 	}
 }
 
-function drawCurrentPath(current) {
+function drawCurrentPath(current, color) {
 	path = [];
 	let temp = current;
 	path.push(temp);
 
 	while(temp.previous) {
-		pathLength = path.length;
 		path.push(temp.previous);
 		temp = temp.previous;
 	}
+	if (path[0] == end) {
 
-	stroke(0, 0, 255);
+		console.log(path.length);
+		pathLength = path.length - 1;
+	}
+
+	stroke(color);
 	strokeWeight(w/5);
 	beginShape();
 	noFill();
@@ -37,6 +41,8 @@ function drawCurrentPath(current) {
 	}
 	endShape();
 }
+
+
 
 function drawStartEnd() {
 	start.show(color(133, 255, 199));

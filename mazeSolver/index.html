@@ -14,6 +14,7 @@
         <div class="row">
           <label for="algorithm">Choose algorithm</label>
           <select id="algorithm" name="algorithm">
+            <option value="random2particle">random2particle</option>
             <option value="random">random</option>
             <option value="aStar">A*</option>
           </select>
@@ -51,6 +52,7 @@
     </div>
     <div class="solution">
         Steps: <span id="steps">0</span>
+        Time: <span id="time">0</span>
         <p id="solution__text">
           Solution:
         </p>
@@ -62,6 +64,9 @@
   <script src="config.js"></script>
   <script src="Spot.js"></script>
   <script src="drawing.js"></script>
+  <script src="algorithm/aStar.js"></script>
+  <script src="algorithm/random.js"></script>
+  <script src="algorithm/random2particle.js"></script>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
 

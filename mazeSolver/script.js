@@ -3,24 +3,23 @@ let openSet = [];
 let closedSet = [];
 let path = [];
 let steps_field;
+let time_field;
 let start;
 let end;
 let current;
+let currentSecond;
 let w, h;
-
-let is_drawing = false;
-let found_path = true;
 let calculating = false;
 
 
 function init() {
 
 	document.getElementById('start').addEventListener('click', function() {
-
 		do_diagonal = document.getElementById('do_diagonal').checked;
 		random_nodes = document.getElementById('random_nodes').checked;
 		grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
 		steps_field = document.getElementById('steps');
+		time_field = document.getElementById('time');
 		cols = document.getElementById('cols').value;
 		rows = document.getElementById('rows').value;
 		algorithm = document.getElementById('algorithm').value;
@@ -28,13 +27,12 @@ function init() {
 
 		buildGrid();
 		generateBoard();
-
 		loop();
 		calculating = true;
 		current = start;
-		steps = -1;
-
-
+		currentSecond = start;
+		steps = 0;
+		time = 0;
 	});
 }
 
@@ -69,7 +67,6 @@ function finishSolving() {
 	noLoop();
 	document.getElementById('solution__text').innerHTML = `Find path in ${steps} steps, path length = ${pathLength}`;
 
-	found_path = true;
 }
 
 function generateBoard() {
@@ -77,11 +74,9 @@ function generateBoard() {
 	openSet = [];
 	closedSet = [];
 	path = [];
-	found_path = false
 
 	start.wall = false;
 	end.wall = false;
-
 	openSet.push(start);
 
 	loop();
@@ -105,96 +100,21 @@ function heuristic(a, b) {
 	return d;
 }
 
-function resolveAStar() {
-
-	let winner = 0;
-
-	for(let i = 0; i < openSet.length; i++) {
-		if(openSet[i].f < openSet[winner].f) {
-			winner = i;
-		}
-	}
-
-	current = openSet[winner];
-
-	if(current === end) {
-		finishSolving();
-	}
-
-	removeFromArray(openSet, current);
-	closedSet.push(current);
-
-	let neighbors = current.neighbors;
-
-	for(let i = 0; i < neighbors.length; i++) {
-		let neighbor = neighbors[i];
-
-		if(!closedSet.includes(neighbor) && !neighbor.wall) {
-			let tempG = current.g + 1;
-
-			let newPath = false;
-
-			if(openSet.includes(neighbor)) {
-				if(tempG < neighbor.g) {
-					neighbor.g = tempG;
-					newPath = true;
-				}
-			} else {
-				neighbor.g = tempG;
-				newPath = true;
-				openSet.push(neighbor);
-			}
-
-			if(newPath) {
-				neighbor.h = heuristic(neighbor, end);
-				neighbor.f = (neighbor.g + neighbor.h);
-				neighbor.previous = current;
-			}
-		}
-	}
-}
-
-function resolveRandom() {
-
-	current.visited = true;
-	if(current === end) {
-		//pathLength = openSet.length;
-		finishSolving();
-
-	} else {
-		let neighbors = current.neighbors;
-		let neighborList = [];
-
-		for (let i = 0; i < neighbors.length; i++) {
-
-			if (!neighbors[i].wall && !neighbors[i].visited) {
-				neighborList.push(neighbors[i]);
-			}
-		}
-		if (neighborList.length > 0) {
-			let next = neighborList[floor(random(0, neighborList.length))];
-			if (next) {
-				next.previous = current;
-				openSet.push(current);
-				current = next;
-			}
-		} else if (openSet.length > 0) {
-			closedSet.push(current);
-			current = openSet.pop();
-		}
-	}
-}
-
 function createCanv() {
-	createCanvas(640, 640);
+	createCanvas(480, 480);
 
-	w = float(640 / cols);
-	h = float(640 / rows);
+	w = float(480 / cols);
+	h = float(480 / rows);
 }
 
 function countSteps() {
 	steps++;
 	steps_field.innerHTML = steps;
+}
+
+function countTime() {
+	time++;
+	time_field.innerHTML = time;
 }
 
 
@@ -218,28 +138,20 @@ function draw() {
 	if (calculating) {
 		document.getElementById('frameRateInput').value= floor(frameRate());
 		createCanv();
-		countSteps();
 
 		if(openSet.length > 0) {
 			if (algorithm == 'aStar') {
 				resolveAStar();
 			}else if (algorithm == 'random') {
 				resolveRandom();
+			}else if (algorithm == 'random2particle') {
+				resolveRandomTwoParticle();
 			}
-
 		} else {
-			document.getElementById('solution__text').innerHTML = 'Nqio solution!';
+			document.getElementById('solution__text').innerHTML = 'No solution!';
 			noLoop();
 		}
-		drawBackground();
-		drawSets();
-		drawCurrentPath(current);
-		drawStartEnd();
-
-
 	}else {
 		noLoop();
 	}
-
-
 }
