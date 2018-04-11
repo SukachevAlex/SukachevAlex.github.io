@@ -8,24 +8,25 @@ function resolveAStar() {
 		}
 	}
 
-	current = openSet[winner];
+	element[0] = openSet[winner];
 
-	if(current === end) {
+	if(element[0] === end) {
+		pathLength = countPathLength(element[0]);
 		finishSolving(true);
 	} else {
 		countSteps();
 		countTime();
 
-		removeFromArray(openSet, current);
-		closedSet.push(current);
+		removeFromArray(openSet, element[0]);
+		closedSet.push(element[0]);
 
-		let neighbors = current.neighbors;
+		let neighbors = element[0].neighbors;
 
 		for(let i = 0; i < neighbors.length; i++) {
 			let neighbor = neighbors[i];
 
 			if(!closedSet.includes(neighbor) && !neighbor.wall) {
-				let tempG = current.g + 1;
+				let tempG = element[0].g + 1;
 
 				let newPath = false;
 
@@ -43,16 +44,17 @@ function resolveAStar() {
 				if(newPath) {
 					neighbor.h = heuristic(neighbor, end);
 					neighbor.f = (neighbor.g + neighbor.h);
-					neighbor.previous = current;
+					neighbor.previous = element[0];
 				}
 			}
 		}
 	}
 
-
-	// drawBackground();
-	// drawSets();
-	// drawStartEnd();
-	// drawCurrentPath(current, color(0, 0, 255));
-
+	drawBackground();
+	drawSets();
+	drawStartEnd();
+	drawCurrentPath(element[0], colorPath[2]);
+	if (openSet.length == 0) {
+		finishSolving(false);
+	}
 }

@@ -16,16 +16,17 @@
           <select id="algorithm" name="algorithm">
             <option value="aStar">A*</option>
             <option value="random">random</option>
-            <option value="random2particle">random2particle</option>
+            <option value="random2particle">random with 2 particle</option>
+            <option value="random3particle">random with 3 particle</option>
           </select>
         </div>
         <div class="row">
           <label for="rows">Rows</label>
-          <input id="rows" type="number" value="5" min="2" max="50">
+          <input id="rows" type="number" value="10" min="2" max="50">
         </div>
         <div class="row">
           <label for="cols">Cols</label>
-          <input id="cols" type="number" value="5" min="2" max="50">
+          <input id="cols" type="number" value="10" min="2" max="50">
         </div>
         <div class="row">
           <label for="do_diagonal">Diagonal</label>
@@ -66,7 +67,6 @@
   <script src="drawing.js"></script>
   <script src="algorithm/aStar.js"></script>
   <script src="algorithm/random.js"></script>
-  <script src="algorithm/random2particle.js"></script>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
 

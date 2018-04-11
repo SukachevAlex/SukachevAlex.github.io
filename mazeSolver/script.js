@@ -6,8 +6,7 @@ let steps_field;
 let time_field;
 let start;
 let end;
-let current;
-let currentSecond;
+let element = [];
 let w, h;
 let calculating = false;
 
@@ -29,10 +28,15 @@ function init() {
 		generateBoard();
 		loop();
 		calculating = true;
-		current = start;
-		currentSecond = start;
+		element = new Array(3).fill(start);
+		element[0].visitors.push(0);
+		element[1].visitors.push(1);
+		element[2].visitors.push(2);
 		steps = 0;
 		time = 0;
+		pathLength = 0;
+		colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
+		createCanv();
 	});
 }
 
@@ -57,6 +61,7 @@ function buildGrid() {
 		end = grid[ Math.round(random(0, (cols - 1))) ][ Math.round(random(0, (rows - 1))) ];
 	} else {
 		start = grid[0][0];
+		start.visited = true;
 		end = grid[(cols - 1)][(rows - 1)];
 	}
 }
@@ -104,14 +109,14 @@ function heuristic(a, b) {
 }
 
 function createCanv() {
-	createCanvas(480, 480);
+	createCanvas(500, 500);
 
-	w = float(480 / cols);
-	h = float(480 / rows);
+	w = float(500 / cols);
+	h = float(500 / rows);
 }
 
-function countSteps() {
-	steps++;
+function countSteps(step = 1) {
+	steps += step;
 	steps_field.innerHTML = steps;
 }
 
@@ -120,6 +125,19 @@ function countTime() {
 	time_field.innerHTML = time;
 }
 
+function countPathLength(elem) {
+	let counter = 0;
+	let path = [];
+	let temp = elem;
+	path.push(temp);
+
+	while (temp.previous) {
+		counter++;
+		path.push(temp.previous);
+		temp = temp.previous;
+	}
+	return counter;
+}
 
 init();
 
@@ -135,30 +153,23 @@ function keyPressed() {
 
 function setup() {
 	frameRate(frames);
+	colorMode(RGB, 255, 255, 255, 1);
 }
 
 function draw() {
 	if (calculating) {
 		document.getElementById('frameRateInput').value= floor(frameRate());
-		createCanv();
 
-		drawBackground();
-		drawSets();
-		drawStartEnd();
-		drawCurrentPath(current, color(0, 0, 255));
-		drawCurrentPath(currentSecond, color(255, 0, 255));
-		if(openSet.length > 0) {
-			if (algorithm == 'aStar') {
-				resolveAStar();
-			}else if (algorithm == 'random') {
-				resolveRandom();
-			}else if (algorithm == 'random2particle') {
-				resolveRandomTwoParticle();
-			}
-		} else {
-			finishSolving(false);
+
+		if (algorithm == 'aStar') {
+			resolveAStar();
+		}else if (algorithm == 'random') {
+			resolveRandom(1);
+		}else if (algorithm == 'random2particle') {
+			resolveRandom(2);
+		}else if (algorithm == 'random3particle') {
+			resolveRandom(3);
 		}
-
 	}else {
 		noLoop();
 	}

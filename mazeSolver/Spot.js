@@ -8,6 +8,7 @@ function Spot(i, j) {
 	this.previous = undefined;
 	this.wall = false;
 	this.visited = false;
+	this.visitors = [];
 
 	if(random(1) < grid_spawn_rate) {
 		this.wall = true;
@@ -29,22 +30,22 @@ function Spot(i, j) {
 		let i = this.i;
 		let j = this.j;
 
-		// left
+		// right
 		if(i < (cols - 1)) {
 			this.neighbors.push(grid[i + 1][j]);
 		}
 
-		// right
+		// left
 		if(i > 0) {
 			this.neighbors.push(grid[i - 1 ][j]);
 		}
 
-		// above
+		// below
 		if(j < (rows - 1)) {
 			this.neighbors.push(grid[i][j + 1 ]);
 		}
 
-		// below
+		// above
 		if(j > 0) {
 			this.neighbors.push(grid[i][j - 1]);
 		}
