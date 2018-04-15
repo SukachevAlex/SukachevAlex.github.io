@@ -17,31 +17,21 @@ function drawSets() {
 	}
 }
 
-function drawCurrentPath(element, color) {
-	path = [];
-	let temp = element;
-	path.push(temp);
+function drawCurrentPath(element, color, num) {
 
-	while(temp.previous) {
-		path.push(temp.previous);
-		temp = temp.previous;
-	}
-	stroke(color);
-	strokeWeight(w/5);
-	beginShape();
-	noFill();
-	if (path.length > 0) {
-		console.log(path);
-		for(let i = 0; i < path.length; i++) {
-			vertex(path[i].i * w + w/2, path[i].j * h + h/2);
+	path = uniqueElements(path);
+	// console.log(path);
+	for (let i = 0; i < path.length; i++) {
+		stroke(colorPath[i]);
+		strokeWeight(w/6);
+		beginShape();
+		noFill();
+		for(let j = 0; j < path[i].length; j++) {
+			vertex(path[i][j].i * w + w/1.5 -  i * 100 / cols, path[i][j].j * h + h/1.5 - i * 100 / rows);
 		}
-	} else {
-		console.log('fuck!');
+		endShape();
 	}
-	endShape();
 }
-
-
 
 function drawStartEnd() {
 	start.show(color(133, 255, 199, 0.9));

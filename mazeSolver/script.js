@@ -1,7 +1,7 @@
 let grid = [];
 let openSet = [];
 let closedSet = [];
-let path = [];
+let path = [[],[],[]];
 let steps_field;
 let time_field;
 let start;
@@ -11,32 +11,38 @@ let w, h;
 let calculating = false;
 
 
+function resetSketch() {
+	init();
+	buildGrid();
+	generateBoard();
+	loop();
+	calculating = true;
+	start.previous = false;
+	element = new Array(3).fill(start);
+	element[0].visitors.push(0);
+	element[1].visitors.push(1);
+	element[2].visitors.push(2);
+	steps = 0;
+	time = 0;
+	path = [[start],[start],[start]];
+	pathLength = 0;
+	colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
+	createCanv();
+}
+
 function init() {
 
-	document.getElementById('start').addEventListener('click', function() {
-		do_diagonal = document.getElementById('do_diagonal').checked;
-		random_nodes = document.getElementById('random_nodes').checked;
-		grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
-		steps_field = document.getElementById('steps');
-		time_field = document.getElementById('time');
-		cols = document.getElementById('cols').value;
-		rows = document.getElementById('rows').value;
-		algorithm = document.getElementById('algorithm').value;
-		document.getElementById('solution__text').innerHTML = 'Solution:';
-
-		buildGrid();
-		generateBoard();
-		loop();
-		calculating = true;
-		element = new Array(3).fill(start);
-		element[0].visitors.push(0);
-		element[1].visitors.push(1);
-		element[2].visitors.push(2);
-		steps = 0;
-		time = 0;
-		pathLength = 0;
-		colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
-		createCanv();
+	do_diagonal = document.getElementById('do_diagonal').checked;
+	random_nodes = document.getElementById('random_nodes').checked;
+	grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
+	steps_field = document.getElementById('steps');
+	time_field = document.getElementById('time');
+	cols = document.getElementById('cols').value;
+	rows = document.getElementById('rows').value;
+	algorithm = document.getElementById('algorithm').value;
+	document.getElementById('solution__text').innerHTML = 'Solution:';
+	document.getElementById('start').addEventListener('click', function () {
+		resetSketch();
 	});
 }
 
@@ -84,7 +90,16 @@ function generateBoard() {
 	path = [];
 
 	start.wall = false;
+	let neighborsStart = start.neighbors;
+	for (let i = 0; i < neighborsStart.length; i++) {
+		neighborsStart[i].wall = false;
+	}
 	end.wall = false;
+
+	let neighborsEnd = end.neighbors;
+	for (let i = 0; i < neighborsEnd.length; i++) {
+		neighborsEnd[i].wall = false;
+	}
 	openSet.push(start);
 
 	loop();
@@ -96,6 +111,12 @@ function removeFromArray(arr, elt) {
 			arr.splice(i, 1);
 		}
 	}
+}
+
+var uniqueElements = (arrArg) => {
+  return arrArg.filter((elem, pos, arr) => {
+    return arr.indexOf(elem) == pos;
+  });
 }
 
 function heuristic(a, b) {
@@ -125,21 +146,16 @@ function countTime() {
 	time_field.innerHTML = time;
 }
 
-function countPathLength(elem) {
+function countPathLength(elem, num = 0) {
 	let counter = 0;
-	let path = [];
 	let temp = elem;
-	path.push(temp);
 
-	while (temp.previous) {
+	while (temp.previous[num]) {
 		counter++;
-		path.push(temp.previous);
-		temp = temp.previous;
+		temp = temp.previous[num];
 	}
 	return counter;
 }
-
-init();
 
 function keyPressed() {
   if (keyCode === UP_ARROW) {
@@ -154,11 +170,12 @@ function keyPressed() {
 function setup() {
 	frameRate(frames);
 	colorMode(RGB, 255, 255, 255, 1);
+	init();
 }
 
 function draw() {
 	if (calculating) {
-		document.getElementById('frameRateInput').value= floor(frameRate());
+		document.getElementById('frameRateInput').value= Math.floor(frameRate());
 
 
 		if (algorithm == 'aStar') {

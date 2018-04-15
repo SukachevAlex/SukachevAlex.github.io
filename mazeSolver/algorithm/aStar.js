@@ -1,5 +1,7 @@
 function resolveAStar() {
 
+
+
 	let winner = 0;
 
 	for(let i = 0; i < openSet.length; i++) {
@@ -9,6 +11,25 @@ function resolveAStar() {
 	}
 
 	element[0] = openSet[winner];
+
+	let tempPath = [];
+	let temp = element[0];
+	tempPath.push(temp);
+	while(temp.previous[0]){
+		tempPath.push(temp.previous[0]);
+		temp = temp.previous[0];
+
+	}
+	path[0] = tempPath;
+
+	drawBackground();
+	drawSets();
+	drawStartEnd();
+	drawCurrentPath();
+
+	if (openSet.length == 0) {
+		finishSolving(false);
+	}
 
 	if(element[0] === end) {
 		pathLength = countPathLength(element[0]);
@@ -44,17 +65,11 @@ function resolveAStar() {
 				if(newPath) {
 					neighbor.h = heuristic(neighbor, end);
 					neighbor.f = (neighbor.g + neighbor.h);
-					neighbor.previous = element[0];
+					neighbor.previous[0] = element[0];
 				}
 			}
 		}
 	}
 
-	drawBackground();
-	drawSets();
-	drawStartEnd();
-	drawCurrentPath(element[0], colorPath[2]);
-	if (openSet.length == 0) {
-		finishSolving(false);
-	}
+
 }
