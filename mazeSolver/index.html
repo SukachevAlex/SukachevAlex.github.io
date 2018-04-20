@@ -46,22 +46,61 @@
           <label for="frameRateInput">FPS(to change &uarr; &darr;)</label>
           <input id="frameRateInput" type="number" value="1" readonly>
         </div>
+        <div class="row">
+          <label for="runCount">Number of runs</label>
+          <input id="runCount" type="number" value="1" min="1" max="100">
+        </div>
       </form>
     </div>
 
     <div class="button">
       <button id="start">Start</button>
     </div>
-    <div class="solution">
+    <div id="results">
+      <table class="results-table">
+        <tr>
+          <td>Algorithm</td>
+          <td>Steps</td>
+          <td>Time</td>
+          <td>Path</td>
+          <td>Unsolved</td>
+        </tr>
+        <tr>
+          <td id="algorithm_table">-</td>
+          <td id="steps_table">-</td>
+          <td id="time_table">-</td>
+          <td id="path_table">-</td>
+          <td id="unsolved_table">-</td>
+        </tr>
+      </table>
+      <button id="open_table" type="button" name="button">See all results</button>
+    </div>
+
+    <div id="solution">
         Steps: <span id="steps">0</span>
         Time: <span id="time">0</span>
-        <p id="solution__text">
-          Solution:
-        </p>
+        <p id="solution__text"></p>
     </div>
 
 
   </header>
+
+  <div id="table-popup" class="table-popup">
+    <div class="table__wrapper">
+      <button id="close_table" type="button" name="button">X</button>
+      <table id="results_table" class="results-table">
+          <tr>
+            <td>#</td>
+            <td>Steps</td>
+            <td>Time</td>
+            <td>Path</td>
+          </tr>
+      </table>
+      <div>Algorithm: <span id="algorithm_field">A*</span> </div>
+      <div>Unsolved <span id="unsolved_field">0</span> </div>
+    </div>
+
+  </div>
 
   <script src="config.js"></script>
   <script src="Spot.js"></script>

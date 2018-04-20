@@ -1,9 +1,14 @@
 
 function resolveRandom(particleCount = 1) {
 
-
 	if(element.includes(end)) {
+
     pathLength = countPathLength(element[element.indexOf(end)], element.indexOf(end));
+		if (pathLength) {
+			result.path.push(pathLength);
+			result.steps.push(steps);
+			result.time.push(time);
+		}
 		finishSolving(true);
 		noLoop();
 	} else {
@@ -39,7 +44,6 @@ function resolveRandom(particleCount = 1) {
 					removeFromArray(element[i].visitors, i);
 					removeFromArray(path[i], element[i]);
 					if (element[i] !== start && element[i].visitors.length < 1) {
-						console.log('11111');
 						closedSet.push(element[i]);
 					}
 					element[i] = element[i].previous[i];
@@ -58,12 +62,10 @@ function resolveRandom(particleCount = 1) {
 					removeFromArray(element[i].visitors, i);
 					removeFromArray(path[i], element[i]);
 					if (element[i] !== start && element[i].visitors.length < 1) {
-						console.log('2222');
 						closedSet.push(element[i]);
 					}
 					element[i] = element[i].previous[i];
 				}
-				//console.log(element);
 				if (element[i]) {
 					element[i].visitors = uniqueElements(element[i].visitors);
 					closedSet = uniqueElements(closedSet);
@@ -72,8 +74,8 @@ function resolveRandom(particleCount = 1) {
     }
 	}
 
-	console.log(element);
 	if (element.every(el => el === start)) {
+		result.unsolved++;
 		finishSolving(false);
 	}
 	drawBackground();

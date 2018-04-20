@@ -7,3 +7,4 @@ let steps = 0;
 let time = 0;
 let pathLength = 0;
 let colorPath = [];
+let runCount = 1;

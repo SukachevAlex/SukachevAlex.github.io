@@ -59,3 +59,67 @@ input[type="number"] {
 .row {
   margin: 10px
 }
+
+#results {
+  display: none;
+  width: 38%;
+}
+
+.table-popup {
+  display: none;
+  position: absolute;
+  width: 85%;
+  height: 70%;
+  margin: 0 auto;
+  background-color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table__wrapper {
+  overflow-y: auto;
+  height: 95%;
+}
+
+.results-table{
+  font-size: 18px;
+  width: 100%;
+  height: auto;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.table__wrapper {
+  margin-top: 30px;
+}
+
+.results-table tr, .results-table td {
+  border: 1px solid #ccc;
+}
+
+#open_table {
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+
+#close_table {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  outline: none;
+  opacity: 0.6;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+#close_table:hover {
+  opacity: 0.9;
+}
