@@ -177,10 +177,10 @@ function heuristic(a, b) {
 }
 
 function createCanv() {
-	createCanvas(500, 500);
+	createCanvas(350, 350);
 
-	w = float(500 / cols);
-	h = float(500 / rows);
+	w = float(350 / cols);
+	h = float(350 / rows);
 }
 
 function countSteps(step = 1) {
