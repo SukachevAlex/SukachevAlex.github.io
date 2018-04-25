@@ -9,6 +9,7 @@ let end;
 let element = [];
 let w, h;
 let calculating = false;
+let generateNew = false;
 
 
 let result = {
@@ -24,7 +25,11 @@ let result = {
 
 function resetSketch() {
 	init();
-	buildGrid();
+	if (!generateNew && grid.length > 0) {
+		resetBuild();
+	} else {
+		buildGrid();
+	}
 	generateBoard();
 	loop();
 	calculating = true;
@@ -45,6 +50,7 @@ function init() {
 
 	do_diagonal = document.getElementById('do_diagonal').checked;
 	random_nodes = document.getElementById('random_nodes').checked;
+	generateNew = document.getElementById('generateNew').checked;
 	grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
 	steps_field = document.getElementById('steps');
 	time_field = document.getElementById('time');
@@ -73,7 +79,6 @@ function buildGrid() {
 	// 2d array + create spots
 	for(let i = 0; i < cols; i++) {
 		grid[i] = [];
-
 		for(let j = 0; j < rows; j++) {
 			grid[i][j] = new Spot(i, j);
 		}
@@ -82,6 +87,26 @@ function buildGrid() {
 	for(let i = 0; i < cols; i++) {
 		for(let j = 0; j < rows; j++) {
 			grid[i][j].addNeighbors(grid);
+		}
+	}
+
+	if (random_nodes) {
+		start = grid[ Math.round(random(0, (cols - 1))) ][ Math.round(random(0, (rows - 1))) ];
+		end = grid[ Math.round(random(0, (cols - 1))) ][ Math.round(random(0, (rows - 1))) ];
+	} else {
+		start = grid[0][0];
+		start.visited = true;
+		end = grid[(cols - 1)][(rows - 1)];
+	}
+}
+
+function resetBuild() {
+
+	for(let i = 0; i < cols; i++) {
+		for(let j = 0; j < rows; j++) {
+				grid[i][j].previous = [];
+				grid[i][j].visited = false;
+				grid[i][j].visitors = [];
 		}
 	}
 	if (random_nodes) {
@@ -177,10 +202,10 @@ function heuristic(a, b) {
 }
 
 function createCanv() {
-	createCanvas(500, 500);
+	createCanvas(350, 350);
 
-	w = float(500 / cols);
-	h = float(500 / rows);
+	w = float(350 / cols);
+	h = float(350 / rows);
 }
 
 function countSteps(step = 1) {
