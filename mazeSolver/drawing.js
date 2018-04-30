@@ -8,19 +8,20 @@ function drawBackground() {
 }
 
 function drawSets() {
-	for(let i = 0; i < closedSet.length; i++) {
-		closedSet[i].show(color(255, 0, 0, 0.6));
-	}
+
 
 	for(let i = 0; i < openSet.length; i++) {
-		openSet[i].show(color(0, 255, 0, 0.6));
+		openSet[i].show(color(0, 255, 0, 0.25));
+	}
+
+	for(let i = 0; i < closedSet.length; i++) {
+		closedSet[i].show(color(255, 0, 0, 0.25));
 	}
 }
 
 function drawCurrentPath(element, color, num) {
 
 	path = uniqueElements(path);
-	// console.log(path);
 	for (let i = 0; i < path.length; i++) {
 		stroke(colorPath[i]);
 		strokeWeight(w/6);
@@ -34,6 +35,27 @@ function drawCurrentPath(element, color, num) {
 }
 
 function drawStartEnd() {
-	start.show(color(133, 255, 199, 0.9));
-	end.show(color(255, 140, 143, 0.9));
+	start.show(color(133, 255, 199, 1));
+	end.show(color(255, 140, 143, 1));
+}
+
+function drawAints() {
+	for (let i = 0; i < aint_array.length; i++) {
+		noStroke();
+		fill(color(0,0,0, 0.85));
+		if (i < 5) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*i + i , aint_array[i].current.j * h + (h/6 - 1)*0, w/6 - 1, h/6 - 1);
+		} else if (i < 10) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-5) + (i-5), aint_array[i].current.j * h + (h/6 - 1)*1, (w/6 - 1), h/6 - 1);
+		} else if (i < 15) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-10) + (i-10), aint_array[i].current.j * h + (h/6 - 1)*2, (w/6 - 1), h/6 - 1);
+		} else if (i < 20) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-15) + (i-15), aint_array[i].current.j * h + (h/6 - 1)*3, (w/6 - 1), h/6 - 1);
+		} else if (i < 25) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-20) + (i-20), aint_array[i].current.j * h + (h/6 - 1)*4, (w/6 - 1), h/6 - 1);
+		} else if (i < 30) {
+			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-25) + (i-25), aint_array[i].current.j * h + (h/6 - 1)*5, (w/6 - 1), h/6 - 1);
+		}
+
+	}
 }

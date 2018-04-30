@@ -8,3 +8,4 @@ let time = 0;
 let pathLength = 0;
 let colorPath = [];
 let runCount = 1;
+let aint_count = 1;

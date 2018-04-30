@@ -9,6 +9,7 @@ function Spot(i, j) {
 	this.wall = false;
 	this.visited = false;
 	this.visitors = [];
+	this.pheromon = 0;
 
 	if(random(1) < grid_spawn_rate) {
 		this.wall = true;

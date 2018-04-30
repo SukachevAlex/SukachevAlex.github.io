@@ -12,13 +12,13 @@
     <div class="settings">
       <form class="form__settings" action="index.html" method="post" oninput="rate.value=range.value">
         <div class="row">
-          <label for="algorithm">Choose algorithm</label>
+          <label for="algorithm">Algorithm</label>
           <select id="algorithm" name="algorithm">
+            <option value="resolveAint">Aint solver</option>
             <option value="aStar">A*</option>
             <option value="random">random</option>
-            <option value="random2particle">random with 2 particle</option>
-            <option value="random3particle">random with 3 particle</option>
-
+            <option value="2particle">random 2 particle</option>
+            <option value="3particle">random 3 particle</option>
           </select>
         </div>
         <div class="row">
@@ -55,37 +55,44 @@
           <label for="runCount">Number of runs</label>
           <input id="runCount" type="number" value="1" min="1" max="100">
         </div>
+        <div class="row">
+          <label for="aint_count">Number of aints</label>
+          <input id="aint_count" type="number" value="1" min="1" max="30">
+        </div>
+
       </form>
+
+      <div class="button">
+        <button id="start">Start</button>
+      </div>
+      <div id="results">
+        <table class="results-table">
+          <tr>
+            <td>Algorithm</td>
+            <td>Steps</td>
+            <td>Time</td>
+            <td>Path</td>
+            <td>Unsolved</td>
+          </tr>
+          <tr>
+            <td id="algorithm_table">-</td>
+            <td id="steps_table">-</td>
+            <td id="time_table">-</td>
+            <td id="path_table">-</td>
+            <td id="unsolved_table">-</td>
+          </tr>
+        </table>
+        <button id="open_table" type="button" name="button">See all results</button>
+      </div>
+
+      <div id="solution">
+          Steps: <span id="steps">0</span>
+          Time: <span id="time">0</span>
+          <p id="solution__text"></p>
+      </div>
     </div>
 
-    <div class="button">
-      <button id="start">Start</button>
-    </div>
-    <div id="results">
-      <table class="results-table">
-        <tr>
-          <td>Algorithm</td>
-          <td>Steps</td>
-          <td>Time</td>
-          <td>Path</td>
-          <td>Unsolved</td>
-        </tr>
-        <tr>
-          <td id="algorithm_table">-</td>
-          <td id="steps_table">-</td>
-          <td id="time_table">-</td>
-          <td id="path_table">-</td>
-          <td id="unsolved_table">-</td>
-        </tr>
-      </table>
-      <button id="open_table" type="button" name="button">See all results</button>
-    </div>
 
-    <div id="solution">
-        Steps: <span id="steps">0</span>
-        Time: <span id="time">0</span>
-        <p id="solution__text"></p>
-    </div>
 
 
   </header>
@@ -109,9 +116,11 @@
 
   <script src="config.js"></script>
   <script src="Spot.js"></script>
+  <script src="Aint.js"></script>
   <script src="drawing.js"></script>
   <script src="algorithm/aStar.js"></script>
   <script src="algorithm/random.js"></script>
+  <script src="algorithm/aint.js"></script>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
 

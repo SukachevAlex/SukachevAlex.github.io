@@ -7,6 +7,8 @@ let time_field;
 let start;
 let end;
 let element = [];
+let aint_array = [];
+let aint_finished = [];
 let w, h;
 let calculating = false;
 let generateNew = false;
@@ -35,15 +37,25 @@ function resetSketch() {
 	calculating = true;
 	start.previous = false;
 	element = new Array(3).fill(start);
-	element[0].visitors.push(0);
-	element[1].visitors.push(1);
-	element[2].visitors.push(2);
+	if (algorithm == 'random' || algorithm == '2particle' || algorithm == '3particle') {
+		element[0].visitors.push(0);
+		element[1].visitors.push(1);
+		element[2].visitors.push(2);
+	}
 	steps = 0;
 	time = 0;
 	path = [[start],[start],[start]];
+	aint_finished = [];
 	pathLength = 0;
 	colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
 	createCanv();
+
+	aint_array = [];
+	for (let i = 0; i < aint_count; i++) {
+		aint_array.push(new Aint(i, start));
+		aint_array[i].visited.push(start);
+		aint_array[i].path.push(start);
+	}
 }
 
 function init() {
@@ -58,6 +70,7 @@ function init() {
 	rows = document.getElementById('rows').value;
 	algorithm = document.getElementById('algorithm').value;
 	run_count = document.getElementById('runCount').value;
+	aint_count = Number(document.getElementById('aint_count').value);
 	document.getElementById("solution").style.display = "block";
 	document.getElementById("results").style.display = "none";
 	document.getElementById('solution__text').style.display = "none";
@@ -202,10 +215,10 @@ function heuristic(a, b) {
 }
 
 function createCanv() {
-	createCanvas(350, 350);
+	createCanvas(700, 700);
 
-	w = float(350 / cols);
-	h = float(350 / rows);
+	w = float(700 / cols);
+	h = float(700 / rows);
 }
 
 function countSteps(step = 1) {
@@ -261,10 +274,12 @@ function draw() {
 			resolveAStar();
 		}else if (algorithm == 'random') {
 			resolveRandom(1);
-		}else if (algorithm == 'random2particle') {
+		}else if (algorithm == '2particle') {
 			resolveRandom(2);
-		}else if (algorithm == 'random3particle') {
+		}else if (algorithm == '3particle') {
 			resolveRandom(3);
+		}else if (algorithm == 'resolveAint') {
+			resolveAint();
 		}
 	}else {
 		noLoop();

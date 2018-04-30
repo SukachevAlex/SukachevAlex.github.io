@@ -1,4 +1,3 @@
-
 function resolveRandom(particleCount = 1) {
 
 	if(element.includes(end)) {
