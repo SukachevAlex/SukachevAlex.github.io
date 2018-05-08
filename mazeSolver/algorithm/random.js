@@ -7,6 +7,8 @@ function resolveRandom(particleCount = 1) {
 			result.path.push(pathLength);
 			result.steps.push(steps);
 			result.time.push(time);
+			result.aint_num.push(0);
+			result.run_num.push(run_count);
 		}
 		finishSolving(true);
 		noLoop();

@@ -1,7 +1,9 @@
 let grid = [];
 let openSet = [];
 let closedSet = [];
+let notVisited = [];
 let path = [[],[],[]];
+let aint_path = [];
 let steps_field;
 let time_field;
 let start;
@@ -9,15 +11,18 @@ let end;
 let element = [];
 let aint_array = [];
 let aint_finished = [];
+let aint_resolve = [];
 let w, h;
 let calculating = false;
 let generateNew = false;
+let mazeResolved = false;
 
 
 let result = {
 	steps: [],
 	time: [],
 	path: [],
+	aint_num: [],
 	steps_average: 0,
 	time_average: 0,
 	path_average: 0,
@@ -32,9 +37,11 @@ function resetSketch() {
 	} else {
 		buildGrid();
 	}
+	notVisited = [].concat(...grid);
 	generateBoard();
 	loop();
 	calculating = true;
+	mazeResolved = false;
 	start.previous = false;
 	element = new Array(3).fill(start);
 	if (algorithm == 'random' || algorithm == '2particle' || algorithm == '3particle') {
@@ -46,6 +53,7 @@ function resetSketch() {
 	time = 0;
 	path = [[start],[start],[start]];
 	aint_finished = [];
+	aint_resolve = [];
 	pathLength = 0;
 	colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
 	createCanv();
@@ -80,6 +88,8 @@ function init() {
 		result.steps = [];
 		result.path = [];
 		result.time = [];
+		result.aint_num = [];
+		result.run_num = [];
 		result.steps_average = 0;
 		result.path_average = 0;
 		result.time_average = 0;
@@ -159,12 +169,14 @@ function finishSolving(resolve) {
 		document.getElementById('open_table').addEventListener('click', function () {
 			document.getElementById('table-popup').style.display = "block";
 			resetTable('results_table');
+			result.run_num.reverse();
 			for (let i = 0; i < result.path.length; i++) {
-				addRow('results_table', i, result.steps[i], result.time[i], result.path[i]);
+				addRow('results_table', result.run_num[i], result.aint_num[i], result.steps[i], result.time[i], result.path[i]);
 			}
 			document.getElementById('unsolved_field').innerHTML = result.unsolved;
 			document.getElementById('algorithm_field').innerHTML = algorithm;
 		});
+		
 	}
 }
 
@@ -173,6 +185,7 @@ function generateBoard() {
 	openSet = [];
 	closedSet = [];
 	path = [];
+	aint_path = [];
 
 	start.wall = false;
 	let neighborsStart = start.neighbors;
@@ -180,6 +193,7 @@ function generateBoard() {
 		neighborsStart[i].wall = false;
 	}
 	end.wall = false;
+	end.pheromon = 100;
 
 	let neighborsEnd = end.neighbors;
 	for (let i = 0; i < neighborsEnd.length; i++) {
@@ -293,14 +307,16 @@ function resetTable(tableID) {
 	}
 }
 
-function addRow(tableID,num, steps, time, path) {
+function addRow(tableID,number, aint_number, steps, time, path) {
 	let table = document.getElementById(tableID);
 	let newRow = table.insertRow(-1);
 	let cell_num = newRow.insertCell(0);
-	let cell_steps = newRow.insertCell(1);
-	let cell_time = newRow.insertCell(2);
-	let cell_path = newRow.insertCell(3);
-	cell_num.innerHTML = ++num;
+	let aint_num = newRow.insertCell(1);
+	let cell_steps = newRow.insertCell(2);
+	let cell_time = newRow.insertCell(3);
+	let cell_path = newRow.insertCell(4);
+	cell_num.innerHTML = number;
+	aint_num.innerHTML = ++aint_number;
 	cell_steps.innerHTML = steps;
 	cell_time.innerHTML = time;
 	cell_path.innerHTML = path;

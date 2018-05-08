@@ -36,6 +36,8 @@ function resolveAStar() {
 			result.path.push(pathLength);
 			result.steps.push(steps);
 			result.time.push(time);
+			result.aint_num.push(0);
+			result.run_num.push(run_count);
 			finishSolving(true);
 		} else {
 			countSteps();

@@ -5,6 +5,7 @@ class Aint {
 		this.path = [];
 		this.current = cur;
 		this.visited = [];
+		this.finished = false;
 	}
 
 }

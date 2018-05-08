@@ -2,16 +2,16 @@ function drawBackground() {
 	background(0);
 	for(let i = 0; i < cols; i++) {
 		for(let j = 0; j < rows; j++) {
-			grid[i][j].show(color(255));
+			grid[i][j].show(color(200,200,200,1));
 		}
 	}
 }
 
 function drawSets() {
 
-
 	for(let i = 0; i < openSet.length; i++) {
-		openSet[i].show(color(0, 255, 0, 0.25));
+		let intensity = openSet[i].visitors.length / aint_count;
+		openSet[i].show(color(0, 255, 0, intensity));
 	}
 
 	for(let i = 0; i < closedSet.length; i++) {
@@ -19,7 +19,7 @@ function drawSets() {
 	}
 }
 
-function drawCurrentPath(element, color, num) {
+function drawCurrentPath() {
 
 	path = uniqueElements(path);
 	for (let i = 0; i < path.length; i++) {
@@ -56,6 +56,12 @@ function drawAints() {
 		} else if (i < 30) {
 			rect(aint_array[i].current.i * w + (w/6 - 1)*(i-25) + (i-25), aint_array[i].current.j * h + (h/6 - 1)*5, (w/6 - 1), h/6 - 1);
 		}
-
 	}
+}
+
+function drawResolvedPath(elem) {
+	noStroke();
+	fill(color(255,0,0, 0.85));
+	rect(elem.i * w + (w/6 - 1), elem.j * h + (h/6 - 1), w/6 - 1, h/6 - 1);
+
 }
