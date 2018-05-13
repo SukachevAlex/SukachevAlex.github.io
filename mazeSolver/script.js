@@ -28,6 +28,17 @@ let result = {
 	unsolved: 0,
 };
 
+function findNotVisited() {
+	notVisited = [];
+	for(let i = 0; i < cols; i++) {
+		for(let j = 0; j < rows; j++) {
+			if (!grid[i][j].wall) {
+				notVisited.push(grid[i][j]);
+			}
+		}
+	}
+
+}
 
 function resetSketch() {
 	init();
@@ -36,12 +47,7 @@ function resetSketch() {
 	} else {
 		buildGrid();
 	}
-	notVisited = [].concat(...grid);
-	for (let i = 0; i < notVisited.length; i++) {
-		if (notVisited[i].wall == true) {
-			removeFromArray(notVisited, notVisited[i]);
-		}
-	}
+	findNotVisited();
 	generateBoard();
 	loop();
 	calculating = true;
@@ -75,6 +81,8 @@ function init() {
 
 	do_diagonal = document.getElementById('do_diagonal').checked;
 	random_nodes = document.getElementById('random_nodes').checked;
+	addSpots = document.getElementById('addSpots').checked;
+
 	generateNew = document.getElementById('generateNew').checked;
 	grid_spawn_rate = document.getElementById('grid_spawn_rate').value;
 	steps_field = document.getElementById('steps');
@@ -126,6 +134,7 @@ function buildGrid() {
 		start.visited = true;
 		end = grid[(cols - 1)][(rows - 1)];
 	}
+	removeLoops();
 }
 
 function resetBuild() {
@@ -148,6 +157,26 @@ function resetBuild() {
 	}
 }
 
+function removeLoops() {
+	for(let i = 0; i < cols; i++) {
+		for(let j = 0; j < rows; j++) {
+			let wallArray = [];
+			for (let k = 0; k < grid[i][j].neighbors.length; k++) {
+				if (grid[i][j].neighbors[k].wall) {
+					wallArray.push(grid[i][j].neighbors[k]);
+				}
+			}
+
+			if (wallArray.length) {
+				if (wallArray.length > 2 || wallArray.length == grid[i][j].neighbors.length) {
+					let randNum = Math.round(random(0, (wallArray.length - 1)));
+					wallArray[randNum].wall = false;
+				}
+			}
+		}
+	}
+}
+
 
 function finishSolving() {
 	calculating = false;
@@ -165,12 +194,15 @@ function finishSolving() {
 
 	} else if (run_count === 0) {
 
-		drawBackground();
-		drawStartEnd();
-		drawSets();
-		drawCurrentPath();
-		findSpots();
-		drawSpots();
+		if (addSpots) {
+			drawBackground();
+			drawStartEnd();
+			drawSets();
+			drawCurrentPath();
+			findSpots();
+			drawSpots();
+		}
+
 
 		noLoop();
 		document.getElementById("solution").style.display = "none";
@@ -195,7 +227,6 @@ function finishSolving() {
 }
 
 function findSpots() {
-	console.log(1);
 	spots = [...path[0]];
 
 	for (let i = 0; i < path[0].length - 2; i++) {

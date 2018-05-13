@@ -27,26 +27,34 @@ function resolveAint() {
 
 
 					if (aint.current == end) {
-						if (path[0].length == 1) {
-							path[0] = [...aint_array[i].path];
-						} else {
-							if (path[0].length > aint_array[i].path.length) {
-								path[0] = [...aint_array[i].path];
-							}
-						}
 						result.path.push(aint_array[i].path.length - 1);
 						result.steps.push(--steps);
 						result.time.push(--time);
 						result.aint_num.push(aint_array[i].number);
 						result.run_num.push(run_count);
 						mazeResolved = true;
-						aint_resolve.push(aint_array[i]);
-						delete aint_array[i];
-						removeFromArray(aint_array, aint_array[i]);
-					} else {
+						if (path[0].length == 1) {
+							path[0] = [...aint_array[i].path];
+							aint_resolve.push(aint_array[i]);
+							delete aint_array[i];
+							removeFromArray(aint_array, aint_array[i]);
+							continue;
+						} else {
+							if (path[0].length > aint_array[i].path.length) {
+								path[0] = [...aint_array[i].path];
+								aint_resolve.push(aint_array[i]);
+								delete aint_array[i];
+								removeFromArray(aint_array, aint_array[i]);
+								continue;
+							}
+						}
+
+
+					}
+					//else {
 						for (let j = 0; j < neighbors.length; j++) {
 
-							if (neighbors[j] == end) {
+							if (neighbors[j] == end && !aint_array[i].visited.includes(end)) {
 								first_turn.push(neighbors[j]);
 								break;
 							} else {
@@ -83,7 +91,6 @@ function resolveAint() {
 								}
 							}
 							let next = max;
-							//let next = second_turn[floor(random(0, second_turn.length))];
 
 							if (next) {
 								aint.path.push(next);
@@ -113,8 +120,10 @@ function resolveAint() {
 						closedSet = uniqueElements(closedSet);
 						openSet = uniqueElements(openSet);
 						aint_finished = uniqueElements(aint_finished);
-					}
+					//}
 				}
+			} else if (mazeResolved){
+				finishSolving();
 			} else {
 				result.unsolved++;
 				finishSolving();

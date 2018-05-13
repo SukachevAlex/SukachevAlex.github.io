@@ -16,9 +16,11 @@
           <select id="algorithm" name="algorithm">
             <option value="resolveAint">Aint solver</option>
             <option value="aStar">A*</option>
+            <!--
             <option value="random">random</option>
             <option value="2particle">random 2 particle</option>
             <option value="3particle">random 3 particle</option>
+            -->
           </select>
         </div>
         <div class="row">
@@ -39,11 +41,15 @@
           <input id="do_diagonal" type="checkbox">
         </div>
         <div class="row">
-          <label for="random_nodes">Random nodes</label>
+          <label for="random_nodes">Random gateway</label>
           <input id="random_nodes" type="checkbox">
         </div>
         <div class="row">
-          0 <input id="grid_spawn_rate" type="range" min="0" max="0.4" step="0.1" value="0" name="range"> 0.4
+          <label for="addSpots">Add spots</label>
+          <input id="addSpots" type="checkbox">
+        </div>
+        <div class="row">
+          0 <input id="grid_spawn_rate" type="range" min="0" max="0.5" step="0.1" value="0" name="range"> 0.5
           <br>
           Obstacles: <output name="rate">0</output>
         </div>
