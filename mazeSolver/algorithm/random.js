@@ -10,7 +10,7 @@ function resolveRandom(particleCount = 1) {
 			result.aint_num.push(0);
 			result.run_num.push(run_count);
 		}
-		finishSolving(true);
+		finishSolving();
 		noLoop();
 	} else {
 		countSteps(particleCount);
@@ -77,7 +77,7 @@ function resolveRandom(particleCount = 1) {
 
 	if (element.every(el => el === start)) {
 		result.unsolved++;
-		finishSolving(false);
+		finishSolving();
 	}
 	drawBackground();
 	drawSets();

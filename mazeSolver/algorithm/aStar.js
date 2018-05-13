@@ -2,7 +2,7 @@ function resolveAStar() {
 
 	if (openSet.length == 0) {
 		result.unsolved++;
-		finishSolving(false);
+		finishSolving();
 	} else {
 		let winner = 0;
 
@@ -38,7 +38,7 @@ function resolveAStar() {
 			result.time.push(time);
 			result.aint_num.push(0);
 			result.run_num.push(run_count);
-			finishSolving(true);
+			finishSolving();
 		} else {
 			countSteps();
 			countTime();

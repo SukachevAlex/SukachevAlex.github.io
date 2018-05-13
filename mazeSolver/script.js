@@ -1,9 +1,8 @@
 let grid = [];
 let openSet = [];
 let closedSet = [];
-let notVisited = [];
 let path = [[],[],[]];
-let aint_path = [];
+let spots = [];
 let steps_field;
 let time_field;
 let start;
@@ -38,6 +37,11 @@ function resetSketch() {
 		buildGrid();
 	}
 	notVisited = [].concat(...grid);
+	for (let i = 0; i < notVisited.length; i++) {
+		if (notVisited[i].wall == true) {
+			removeFromArray(notVisited, notVisited[i]);
+		}
+	}
 	generateBoard();
 	loop();
 	calculating = true;
@@ -54,8 +58,9 @@ function resetSketch() {
 	path = [[start],[start],[start]];
 	aint_finished = [];
 	aint_resolve = [];
+	spots = [];
 	pathLength = 0;
-	colorPath.push(color(255,225,57, 0.7), color(255, 57, 215, 0.7), color(97, 57, 255, 0.7)); //yellow magenta purple
+	colorPath.push(color(97, 57, 255, 0.7), color(255, 57, 215, 0.7), color(255,225,57, 0.7), );
 	createCanv();
 
 	aint_array = [];
@@ -130,6 +135,7 @@ function resetBuild() {
 				grid[i][j].previous = [];
 				grid[i][j].visited = false;
 				grid[i][j].visitors = [];
+				grid[i][j].pheromon = 0;
 		}
 	}
 	if (random_nodes) {
@@ -143,7 +149,7 @@ function resetBuild() {
 }
 
 
-function finishSolving(resolve) {
+function finishSolving() {
 	calculating = false;
 	run_count--;
 	document.getElementById('runCount').value = run_count;
@@ -158,7 +164,15 @@ function finishSolving(resolve) {
 		setTimeout(resetSketch, 1250);
 
 	} else if (run_count === 0) {
-		loop();
+
+		drawBackground();
+		drawStartEnd();
+		drawSets();
+		drawCurrentPath();
+		findSpots();
+		drawSpots();
+
+		noLoop();
 		document.getElementById("solution").style.display = "none";
 		document.getElementById("results").style.display = "block";
 		document.getElementById('runCount').value = 1;
@@ -176,7 +190,21 @@ function finishSolving(resolve) {
 			document.getElementById('unsolved_field').innerHTML = result.unsolved;
 			document.getElementById('algorithm_field').innerHTML = algorithm;
 		});
-		
+
+	}
+}
+
+function findSpots() {
+	console.log(1);
+	spots = [...path[0]];
+
+	for (let i = 0; i < path[0].length - 2; i++) {
+		if (path[0][i].i == path[0][i+1].i && path[0][i].i == path[0][i+2].i) {
+			removeFromArray(spots, path[0][i+1]);
+		}
+		if (path[0][i].j == path[0][i+1].j && path[0][i].j == path[0][i+2].j) {
+			removeFromArray(spots, path[0][i+1]);
+		}
 	}
 }
 
@@ -185,7 +213,6 @@ function generateBoard() {
 	openSet = [];
 	closedSet = [];
 	path = [];
-	aint_path = [];
 
 	start.wall = false;
 	let neighborsStart = start.neighbors;

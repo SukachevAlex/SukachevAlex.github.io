@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  margin: 20px;
+  margin: 5px;
 }
 
 
@@ -62,6 +62,7 @@ input[type="number"] {
 #results {
   display: none;
   width: 38%;
+  margin-top: 200px;
 }
 
 .table-popup {
@@ -126,8 +127,8 @@ input[type="number"] {
 
 #defaultCanvas0 {
   position: absolute;
-  top: 50%;
-  left: 20%;
+  top: 39%;
+  left: 24%;
   transform: translateY(-50%);
   box-sizing: border-box;
   width: 75vw !important;

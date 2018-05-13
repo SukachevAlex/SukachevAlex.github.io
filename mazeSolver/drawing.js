@@ -10,12 +10,20 @@ function drawBackground() {
 function drawSets() {
 
 	for(let i = 0; i < openSet.length; i++) {
-		let intensity = openSet[i].visitors.length / aint_count;
+		let intensity = openSet[i].pheromon / (aint_count * 0.1);
 		openSet[i].show(color(0, 255, 0, intensity));
 	}
 
 	for(let i = 0; i < closedSet.length; i++) {
 		closedSet[i].show(color(255, 0, 0, 0.25));
+	}
+}
+
+function drawSpots() {
+	noStroke();
+	fill(color(0,0,128, 1));
+	for (let i = 0; i < spots.length; i++) {
+			rect(spots[i].i * w + (w/2.5 - 1)  , spots[i].j * h + (h/2.5 - 1), w/5 - 1, h/5 - 1);
 	}
 }
 

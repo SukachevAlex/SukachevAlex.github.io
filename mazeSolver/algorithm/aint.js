@@ -6,10 +6,10 @@ function resolveAint() {
 
 
 	if (aint_array.length > 0) {
-		
+
 		//finish if all spot are visited and find path
 		if (mazeResolved && notVisited.length == 0) {
-			finishSolving(true);
+			finishSolving();
 		} else {
 			if (aint_finished.length !== aint_array.length) {
 
@@ -60,8 +60,12 @@ function resolveAint() {
 							}
 						}
 						if (first_turn.length > 0) {
-
-							let next = first_turn[floor(random(0, first_turn.length))];
+							let next;
+							if (first_turn.includes(end)) {
+								next = end;
+							} else {
+								next = first_turn[floor(random(0, first_turn.length))];
+							}
 							if (next) {
 								aint.path.push(next);
 								openSet.push(aint_array[i].current);
@@ -113,7 +117,7 @@ function resolveAint() {
 				}
 			} else {
 				result.unsolved++;
-				finishSolving(false);
+				finishSolving();
 			}
 		}
 
@@ -134,7 +138,7 @@ function resolveAint() {
 		}
 
 	} else {
-		finishSolving(true);
+		finishSolving();
 	}
 
 
