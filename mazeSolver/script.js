@@ -26,6 +26,7 @@ let result = {
 	time_average: 0,
 	path_average: 0,
 	unsolved: 0,
+	spot_count: 0,
 };
 
 function findNotVisited() {
@@ -107,6 +108,7 @@ function init() {
 		result.path_average = 0;
 		result.time_average = 0;
 		result.unsolved = 0;
+		result.spot_count = 0;
 	});
 }
 
@@ -166,7 +168,6 @@ function removeLoops() {
 					wallArray.push(grid[i][j].neighbors[k]);
 				}
 			}
-
 			if (wallArray.length) {
 				if (wallArray.length > 2 || wallArray.length == grid[i][j].neighbors.length) {
 					let randNum = Math.round(random(0, (wallArray.length - 1)));
@@ -189,6 +190,8 @@ function finishSolving() {
 	document.getElementById('time_table').innerHTML = result.time_average;
 	document.getElementById('path_table').innerHTML = result.path_average
 	document.getElementById('unsolved_table').innerHTML = result.unsolved;
+
+
 	if (run_count > 0) {
 		setTimeout(resetSketch, 1250);
 
@@ -201,6 +204,8 @@ function finishSolving() {
 			drawCurrentPath();
 			findSpots();
 			drawSpots();
+			document.getElementById('spot_count_table').innerHTML = result.spot_count;
+
 		}
 
 
@@ -220,6 +225,9 @@ function finishSolving() {
 				addRow('results_table', result.run_num[i], result.aint_num[i], result.steps[i], result.time[i], result.path[i]);
 			}
 			document.getElementById('unsolved_field').innerHTML = result.unsolved;
+			document.getElementById('spot_count_field').innerHTML = result.spot_count;
+
+
 			document.getElementById('algorithm_field').innerHTML = algorithm;
 		});
 
@@ -237,6 +245,7 @@ function findSpots() {
 			removeFromArray(spots, path[0][i+1]);
 		}
 	}
+	result.spot_count = spots.length;
 }
 
 function generateBoard() {
