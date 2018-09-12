@@ -65,9 +65,8 @@ function generateController(type) {
                 class="popup__circle-slider"
                 type="image/svg+xml"
                 data="../img/svg/controller.svg">
-                    <img class="popup__circle-slider " src="../img/svg/controller.svg">
+                    <img class="popup__circle-slider " src="img/svg/controller.svg">
                 </object>
                 </div>`;
 
 }
-// <div class="popup__controller-temperature">+23</div>
