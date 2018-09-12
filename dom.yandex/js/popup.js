@@ -64,7 +64,7 @@ function generateController(type) {
             <object
                 class="popup__circle-slider"
                 type="image/svg+xml"
-                data="../img/svg/controller.svg">
+                data="img/svg/controller.svg">
                     <img class="popup__circle-slider " src="img/svg/controller.svg">
                 </object>
                 </div>`;
