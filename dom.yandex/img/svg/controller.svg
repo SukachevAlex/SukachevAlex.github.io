@@ -1,0 +1,51 @@
+<svg id="controller" onload="makeDraggable(evt)" width="221px" height="221px" viewBox="0 0 221 221" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <script xlink:href="../../js/controller.js" />
+            <style>
+                #temperatureValue {
+                    font-size: 66px;
+                    color: $fontColor;
+                    letter-spacing: 0;
+                    text-align: left;
+                    font-weight: bold;
+                }
+            </style>
+            <defs>
+
+                <circle id="darkTicks" cx="110" cy="110" r="99" stroke="#333333"  transform="rotate(-16 110 110)" stroke-width="22" stroke-dasharray ="622" stroke-dashoffset="104"></circle>
+                <circle id="lightTicks" cx="110" cy="110" r="99" stroke="#F5A623" transform="rotate(-16 110 110)" stroke-width="22" stroke-dasharray ="622" stroke-dashoffset="185"></circle>
+                <circle id="bacgkroundTicks" cx="110" cy="110" r="98" stroke="#FFF" stroke-width="25"></circle>
+
+                <circle id="middleCircle" cx="111" cy="111" r="89"></circle>
+                <filter x="-3.9%" y="-2.8%" width="107.9%" height="107.9%" filterUnits="objectBoundingBox" id="middleCircleFilter">
+                    <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+                    <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+                    <feColorMatrix values="0 0 0 0 0.524208121   0 0 0 0 0.475951723   0 0 0 0 0.279116418  0 0 0 0.446388134 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+                </filter>
+            </defs>
+            
+            <g id="final" opacity="0.69921875"> 
+                <g id="ticks">
+                    <g id="darkTicksGroup" stroke-width="1" fill="none" fill-rule="evenodd" transform="rotate(135 110 110)">
+                        <use xlink:href="#darkTicks"></use>
+                    </g> 
+                        
+                    <g id="lightTicksGroup" stroke-width="1" fill="none" fill-rule="evenodd" transform="rotate(135 110 110)">  
+                        <use xlink:href="#lightTicks"></use>
+                    </g> 
+                    
+                    <g id="bacgkroundTicksGroup"  stroke-width="1" fill="none" fill-rule="evenodd"  stroke-dasharray="4,1" transform="rotate(135 110 110)">
+                        <use xlink:href="#bacgkroundTicks"></use>
+                    </g>
+                </g> 
+                        
+                <g id="middleCircle">
+                    <use fill="black" fill-opacity="1" filter="url(#middleCircleFilter)" xlink:href="#middleCircle"></use>
+                    <use fill="#FEFEFE" fill-rule="evenodd" xlink:href="#middleCircle"></use> 
+                </g>
+
+                <g id="temperatureGroup">
+                    <text id="temperatureValue" x="60" y="127" >+23</text>
+                </g>
+            </g>
+
+        </svg>
